@@ -27,6 +27,18 @@ services:
       - zookeeper
     networks:
       - streaming-stack
+  kafka-ui:
+    image: "provectuslabs/kafka-ui:2a61b97fabe9fb534737d47523d2717a76d624b4"
+    ports:
+      - "9080:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=streaming-demo
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:29092
+    depends_on:
+      - kafka
+    networks:
+      - streaming-stack
+
   jobmanager:
     image: "flink:1.16.0"
     command: jobmanager
@@ -38,6 +50,7 @@ services:
         jobmanager.rpc.address: jobmanager
     networks:
       - streaming-stack
+
   taskmanager:
     image: "flink:1.16-scala_2.12-java11"
     depends_on:
@@ -53,3 +66,4 @@ services:
 
 networks:
   streaming-stack:
+
